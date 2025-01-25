@@ -2,31 +2,30 @@ extends CharacterBody3D
 
 @onready var camera_spring: SpringArm3D = $CamRoot/SpringArm3D
 @onready var camera: Camera3D = $CamRoot/SpringArm3D/Camera3D
-const MOUSE_SENSITIVITY = 0.005
-
 @onready var animation_player = $player_v1/AnimationPlayer
 @onready var visuals = $player_v1
 
 @export var blaster: Blaster;
 
-var speed
-var WALK_SPEED = 5.0
-var SPRINT_SPEED = 15.0
+const MOUSE_SENSITIVITY = 0.005
 const DEFAULT_FOV = 70.0
 const ZOOM_FOV = 45.0
 const JUMP_VELOCITY = 4.5
 const PROJECTILE_SPEED = 20
-var isSprinting = false
 
-var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
+var speed = 5.0
+var WALK_SPEED = 5.0
+var SPRINT_SPEED = 15.0
+var is_sprinting = false
 var is_zooming = false
 
-# mouse lock
+var gravity
+var projectile_scene = preload("res://scenes/projectile/projectile.tscn")
+
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 
-
-var projectile_scene = preload("res://scenes/projectile/projectile.tscn")
 
 func _input(_event):
 	if Input.is_action_just_pressed("shoot"):
@@ -37,7 +36,6 @@ func _input(_event):
 		is_zooming = false
 
 
-# camera
 func _unhandled_input(event: InputEvent):
 	if event is InputEventMouseButton:
 		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
@@ -59,15 +57,15 @@ func _physics_process(delta):
 
 	if Input.is_action_pressed("sprint"):
 		speed = SPRINT_SPEED
-		isSprinting = true
+		is_sprinting = true
 	else:
 		speed = WALK_SPEED
-		isSprinting = false
+		is_sprinting = false
 
 	var input_dir := Input.get_vector("move_left", "move_right", "move_forward", "move_backward")
 	var direction := (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 	if direction:
-		if isSprinting:
+		if is_sprinting:
 			if animation_player.current_animation != "Sprint":
 				animation_player.play("Sprint")
 		else:

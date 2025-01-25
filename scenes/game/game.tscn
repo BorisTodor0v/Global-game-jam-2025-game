@@ -1,6 +1,9 @@
-[gd_scene load_steps=9 format=3 uid="uid://x1k6x84g6ciq"]
+[gd_scene load_steps=12 format=3 uid="uid://x1k6x84g6ciq"]
 
 [ext_resource type="PackedScene" uid="uid://bsdrico54rq6e" path="res://scenes/player/player.tscn" id="1_3hlqg"]
+[ext_resource type="Script" path="res://scenes/game/game_manager.gd" id="1_n8kro"]
+[ext_resource type="Script" path="res://scenes/game/enemy_manager.gd" id="2_8l4ho"]
+[ext_resource type="PackedScene" uid="uid://bbdytp3p86jux" path="res://scenes/enemy/enemy.tscn" id="3_eus4r"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_5bkbc"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -28,6 +31,7 @@ size = Vector3(10, 6, 1)
 points = PackedVector3Array(5, 3, 0.5, 5, 3, -0.5, -5, 3, 0.5, 5, -3, 0.5, 5, -3, -0.5, -5, 3, -0.5, -5, -3, 0.5, -5, -3, -0.5)
 
 [node name="Node3D" type="Node3D"]
+script = ExtResource("1_n8kro")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_xiefi")
@@ -55,3 +59,11 @@ mesh = SubResource("BoxMesh_0debb")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Wall"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0410955, 0.181322, -3.59634)
 shape = SubResource("ConvexPolygonShape3D_e2qrt")
+
+[node name="Enemies" type="Node3D" parent="." node_paths=PackedStringArray("enemy_spawn_point")]
+script = ExtResource("2_8l4ho")
+enemy_spawn_point = NodePath("../Marker3D")
+enemy_scene = ExtResource("3_eus4r")
+
+[node name="Marker3D" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.78673, 0, 4.06487)
