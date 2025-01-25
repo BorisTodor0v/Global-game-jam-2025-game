@@ -52,7 +52,6 @@ script = ExtResource("1_3gv8l")
 projectile_position = NodePath("Marker3D")
 
 [node name="Blaster_001" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 mesh = SubResource("ArrayMesh_0c552")
 skeleton = NodePath("")
 
