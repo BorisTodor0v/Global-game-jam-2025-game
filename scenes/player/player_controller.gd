@@ -4,9 +4,11 @@ extends CharacterBody3D
 @onready var camera: Camera3D = $CamRoot/SpringArm3D/Camera3D
 @onready var animation_player = $player_v1/AnimationPlayer
 @onready var visuals = $player_v1
-@onready var grapplecast = $GrappleCast
+@onready var grapplecast = $CamRoot/SpringArm3D/Camera3D/GrappleCast
+@onready var player: Node3D = get_parent()
 
 @export var blaster: Blaster;
+@export var rope: Node3D
 
 const MOUSE_SENSITIVITY = 0.005
 const DEFAULT_FOV = 70.0
@@ -85,14 +87,28 @@ func _handle_grapple():
 	if grappling:
 		velocity.y = 0
 		if not hookpoint_get:
-			hookpoint = grapplecast.get_collision_point() + Vector3(0, 0.5, 0)
+			hookpoint = grapplecast.get_collision_point() + Vector3(0, 0.1, 0)
 			hookpoint_get = true
 		if hookpoint.distance_to(transform.origin) > 1:
 			if hookpoint_get:
-				transform.origin = lerp(transform.origin, hookpoint, 0.05)
+				transform.origin = lerp(transform.origin, hookpoint, 0.015)
 		else:
 			grappling = false
 			hookpoint_get = false
+			
+	update_rope()
+
+func update_rope():
+	if !grappling:
+		rope.visible = false
+		return
+		
+	rope.visible = true
+	var dist = player.global_position.distance_to(hookpoint)
+	rope.scale.y = dist
+	
+	rope.look_at(hookpoint)
+	rope.scale = Vector3(1, 1, dist)
 
 func _handle_movement(delta: float) -> void:
 	if not is_on_floor():
