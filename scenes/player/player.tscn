@@ -1,8 +1,7 @@
-[gd_scene load_steps=21 format=4 uid="uid://bsdrico54rq6e"]
+[gd_scene load_steps=20 format=4 uid="uid://bsdrico54rq6e"]
 
 [ext_resource type="Texture2D" uid="uid://cf43r40p7js2g" path="res://scenes/player/model/player_v1_Untitled.png" id="1_11hcn"]
 [ext_resource type="Script" path="res://scripts/player_controller.gd" id="1_fgb85"]
-[ext_resource type="Script" path="res://scripts/camera_controller.gd" id="3_07nah"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_dlwx2"]
 radius = 0.25
@@ -3086,17 +3085,12 @@ mesh = SubResource("CapsuleMesh_qjd5f")
 
 [node name="CamRoot" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6, 0)
-script = ExtResource("3_07nah")
 
-[node name="CamYaw" type="Node3D" parent="CamRoot"]
-
-[node name="CamPitch" type="Node3D" parent="CamRoot/CamYaw"]
-
-[node name="SpringArm3D" type="SpringArm3D" parent="CamRoot/CamYaw/CamPitch"]
+[node name="SpringArm3D" type="SpringArm3D" parent="CamRoot"]
 shape = SubResource("SphereShape3D_1xhr8")
 spring_length = 4.0
 
-[node name="Camera3D" type="Camera3D" parent="CamRoot/CamYaw/CamPitch/SpringArm3D"]
+[node name="Camera3D" type="Camera3D" parent="CamRoot/SpringArm3D"]
 
 [node name="player_v1" type="Node3D" parent="."]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)
