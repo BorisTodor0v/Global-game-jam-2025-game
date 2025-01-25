@@ -5,6 +5,9 @@ extends CharacterBody3D
 @onready var animation_player = $player_v1/AnimationPlayer
 @onready var visuals = $player_v1
 
+@onready var grapplecast = $GrappleCast
+
+
 @export var blaster: Blaster;
 
 const MOUSE_SENSITIVITY = 0.005
@@ -22,6 +25,11 @@ var is_zooming = false
 var gravity
 var projectile_scene = preload("res://scenes/projectile/projectile.tscn")
 
+var grappling = false
+var hookpoint = Vector3()
+var hookpoint_get = false
+
+# mouse lock
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
@@ -47,8 +55,28 @@ func _unhandled_input(event: InputEvent):
 			camera_spring.rotate_x(-event.relative.y * MOUSE_SENSITIVITY)
 			camera_spring.rotation.x = clamp(camera_spring.rotation.x, deg_to_rad(-90), deg_to_rad(90))
 
+func grapple():
+	if Input.is_action_just_pressed("grapple"):
+		if grapplecast.is_colliding():
+			print_debug(grapplecast.get_collider())
+			if not grappling:
+				grappling = true
+	if grappling:
+		velocity.y = 0
+		if not hookpoint_get:
+			hookpoint = grapplecast.get_collision_point() + Vector3(0, 0.5, 0)
+			hookpoint_get = true
+		if hookpoint.distance_to(transform.origin) > 1:
+			if hookpoint_get:
+				transform.origin = lerp(transform.origin, hookpoint, 0.05)
+		else:
+			grappling = false
+			hookpoint_get = false
+
 # movement
 func _physics_process(delta):
+	grapple()
+	
 	if not is_on_floor():
 		velocity += get_gravity() * delta
 

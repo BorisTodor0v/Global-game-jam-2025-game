@@ -3760,7 +3760,7 @@ mesh = SubResource("ArrayMesh_v786o")
 skin = SubResource("Skin_as3ub")
 
 [node name="BoneAttachment3D" type="BoneAttachment3D" parent="player_v1/Armature_005/Skeleton3D"]
-transform = Transform3D(0.635105, 0.412747, 0.652902, 0.770227, -0.402136, -0.495013, 0.0582401, 0.817268, -0.573308, -0.212137, 1.08549, 0.544396)
+transform = Transform3D(0.635105, 0.412748, 0.652902, 0.770227, -0.402135, -0.495013, 0.0582393, 0.817268, -0.573308, -0.212137, 1.08548, 0.544397)
 bone_name = "mixamorig_RightHand"
 bone_idx = 14
 
@@ -3772,3 +3772,7 @@ libraries = {
 "": SubResource("AnimationLibrary_71kh5")
 }
 playback_default_blend_time = 0.2
+
+[node name="GrappleCast" type="RayCast3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6, -0.995391)
+target_position = Vector3(0, 0, -60)

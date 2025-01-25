@@ -67,3 +67,15 @@ enemy_scene = ExtResource("3_eus4r")
 
 [node name="Marker3D" type="Marker3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.78673, 0, 4.06487)
+
+[node name="Wall2" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 11.5876, 14.662)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Wall2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0410955, 0.181322, -3.59634)
+mesh = SubResource("BoxMesh_0debb")
+skeleton = NodePath("../../Wall2")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Wall2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0410955, 0.181322, -3.59634)
+shape = SubResource("ConvexPolygonShape3D_e2qrt")
