@@ -1,6 +1,6 @@
 [gd_scene load_steps=9 format=3 uid="uid://x1k6x84g6ciq"]
 
-[ext_resource type="PackedScene" uid="uid://bsdrico54rq6e" path="res://scenes/player/player.tscn" id="1_jxwhx"]
+[ext_resource type="PackedScene" uid="uid://bsdrico54rq6e" path="res://scenes/player/player.tscn" id="1_3hlqg"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_5bkbc"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -36,7 +36,7 @@ environment = SubResource("Environment_xiefi")
 transform = Transform3D(-0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, 0.75, -0.433013, 0, 0, 0)
 shadow_enabled = true
 
-[node name="Player" parent="." instance=ExtResource("1_jxwhx")]
+[node name="Player" parent="." instance=ExtResource("1_3hlqg")]
 
 [node name="Ground" type="StaticBody3D" parent="."]
 

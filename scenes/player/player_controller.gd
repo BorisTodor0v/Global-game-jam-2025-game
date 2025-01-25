@@ -1,12 +1,32 @@
 extends CharacterBody3D
 
 @onready var camera_spring: SpringArm3D = $CamRoot/SpringArm3D
+@onready var camera: Camera3D = $CamRoot/SpringArm3D/Camera3D
+
+@export var blaster: Blaster;
 
 const MOUSE_SENSITIVITY = 0.005
 const SPEED = 5.0
 const JUMP_VELOCITY = 4.5
+const ZOOM_FOV = 45.0
+const DEFAULT_FOV = 70.0
+const PROJECTILE_SPEED = 20
 
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
+var is_zooming = false
+
+var projectile_scene = preload("res://scenes/projectile/projectile.tscn")
+
+func _input(_event):
+	if Input.is_action_just_pressed("shoot"):
+		shoot_projectile()
+	if Input.is_action_pressed("aim"):
+		is_zooming = true
+	else:
+		is_zooming = false
+
+func _ready():
+	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
 func _unhandled_input(event: InputEvent):
 	if event is InputEventMouseButton:
@@ -36,3 +56,15 @@ func _physics_process(delta):
 		velocity.z = move_toward(velocity.z, 0, SPEED)
 
 	move_and_slide()
+
+	camera.fov = lerp(camera.fov, ZOOM_FOV if is_zooming else DEFAULT_FOV, 10 * delta)
+
+func shoot_projectile():
+	var projectile = projectile_scene.instantiate()
+	get_tree().current_scene.add_child(projectile)
+
+	projectile.global_position = blaster.projectile_position.global_position
+	var shoot_direction = -camera.global_transform.basis.z.normalized()
+
+	if projectile.has_method("set_velocity"):
+		projectile.set_velocity(shoot_direction * PROJECTILE_SPEED)
