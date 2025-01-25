@@ -1,0 +1,5 @@
+- Added initial model of player character
+- Refactored nodes in "game" and "player" scenes
+- Moved "player.tscn" to "player" folder
+- Changed camera root position
+- Changed length for the camera SpringArm3D to 4m

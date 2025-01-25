@@ -1,8 +1,6 @@
-[gd_scene load_steps=12 format=3 uid="uid://x1k6x84g6ciq"]
+[gd_scene load_steps=9 format=3 uid="uid://x1k6x84g6ciq"]
 
-[ext_resource type="PackedScene" uid="uid://bsdrico54rq6e" path="res://scenes/player.tscn" id="1_jxwhx"]
-[ext_resource type="Script" path="res://scripts/character_body_3d.gd" id="2_emous"]
-[ext_resource type="Script" path="res://scenes/camera_controller.gd" id="3_njjko"]
+[ext_resource type="PackedScene" uid="uid://bsdrico54rq6e" path="res://scenes/player/player.tscn" id="1_jxwhx"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_5bkbc"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -16,8 +14,6 @@ background_mode = 2
 sky = SubResource("Sky_g0kp7")
 tonemap_mode = 2
 glow_enabled = true
-
-[sub_resource type="SphereShape3D" id="SphereShape3D_mhyyv"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_8u3qp"]
 size = Vector2(15, 15)
@@ -41,21 +37,6 @@ transform = Transform3D(-0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, 0.75
 shadow_enabled = true
 
 [node name="Player" parent="." instance=ExtResource("1_jxwhx")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3604, 0)
-script = ExtResource("2_emous")
-
-[node name="CamRoot" type="Node3D" parent="Player"]
-script = ExtResource("3_njjko")
-
-[node name="CamYaw" type="Node3D" parent="Player/CamRoot"]
-
-[node name="CamPitch" type="Node3D" parent="Player/CamRoot/CamYaw"]
-
-[node name="SpringArm3D" type="SpringArm3D" parent="Player/CamRoot/CamYaw/CamPitch"]
-shape = SubResource("SphereShape3D_mhyyv")
-spring_length = 5.0
-
-[node name="Camera3D" type="Camera3D" parent="Player/CamRoot/CamYaw/CamPitch/SpringArm3D"]
 
 [node name="Ground" type="StaticBody3D" parent="."]
 

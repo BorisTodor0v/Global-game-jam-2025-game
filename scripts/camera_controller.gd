@@ -24,5 +24,5 @@ func _input(event):
 func _physics_process(delta: float):
 	pitch = clamp(pitch, pitch_min, pitch_max)
 	
-	yaw_node.rotation_degrees.y = lerp(yaw_node.rotation_degrees.y, yaw, yaw_acceleration * delta)
-	pitch_node.rotation_degrees.x = lerp(pitch_node.rotation_degrees.x, pitch, pitch_acceleration * delta)
+	yaw_node.rotation_degrees.y = yaw #lerp(yaw_node.rotation_degrees.y, yaw, yaw_acceleration * delta)
+	pitch_node.rotation_degrees.x = pitch #lerp(pitch_node.rotation_degrees.x, pitch, pitch_acceleration * delta)
