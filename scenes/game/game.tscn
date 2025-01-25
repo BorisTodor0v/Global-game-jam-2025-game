@@ -16,10 +16,10 @@ tonemap_mode = 2
 glow_enabled = true
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_8u3qp"]
-size = Vector2(15, 15)
+size = Vector2(200, 200)
 
-[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_ukai7"]
-points = PackedVector3Array(-7.5, 0, -7.5, -7.5, 0, 7.5, 7.5, 0, -7.5, 7.5, 0, 7.5)
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_r7k4b"]
+points = PackedVector3Array(-100, 0, -100, -100, 0, 100, 100, 0, -100, 100, 0, 100)
 
 [sub_resource type="BoxMesh" id="BoxMesh_0debb"]
 size = Vector3(10, 6, 1)
@@ -44,7 +44,7 @@ shadow_enabled = true
 mesh = SubResource("PlaneMesh_8u3qp")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Ground"]
-shape = SubResource("ConvexPolygonShape3D_ukai7")
+shape = SubResource("ConvexPolygonShape3D_r7k4b")
 
 [node name="Wall" type="StaticBody3D" parent="."]
 

@@ -1,6 +1,8 @@
 class_name Projectile
 extends Node3D
 
+@export var direction: Vector3
+
 @export var speed: float = 20.0
 var velocity: Vector3 = Vector3.ZERO
 
@@ -15,6 +17,9 @@ func _physics_process(delta: float) -> void:
 
 	if global_position.length() > 1000:
 		queue_free()
+
+	if direction:
+		set_velocity(direction * speed)
 
 func _on_area_entered(_area):
 	queue_free()
