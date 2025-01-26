@@ -5,7 +5,7 @@ extends CharacterBody3D
 @onready var camera: Camera3D = $CamRoot/SpringArm3D/Camera3D
 @onready var visuals = $player_v3
 @onready var grapplecast = $CamRoot/SpringArm3D/Camera3D/GrappleCast
-@onready var aim_raycast : RayCast3D = $CamRoot/SpringArm3D/Camera3D/AimRaycast
+@onready var aim_raycast: RayCast3D = $CamRoot/SpringArm3D/Camera3D/AimRaycast
 @onready var player: Node3D = get_parent()
 
 @export var blaster: Blaster
@@ -20,7 +20,7 @@ const DEFAULT_FOV = 70.0
 const ZOOM_FOV = 45.0
 const JUMP_VELOCITY = 4.5
 const PROJECTILE_SPEED = 20
-const FIRE_RATE = 0.2
+const FIRE_RATE = 0.13
 const WALK_SPEED = 5.0
 const SPRINT_SPEED = 15.0
 
@@ -96,7 +96,7 @@ func _physics_process(delta):
 
 	camera.fov = lerp(camera.fov, ZOOM_FOV if is_zooming else DEFAULT_FOV, 10 * delta)
 
-func _process(delta):
+func _process(_delta):
 	if Input.is_action_pressed("aim"):
 		is_zooming = true
 	
@@ -108,14 +108,14 @@ func _rotate_camera(event: InputEventMouseMotion) -> void:
 	camera_spring.rotate_x(-event.relative.y * MOUSE_SENSITIVITY)
 	camera_spring.rotation.x = clamp(camera_spring.rotation.x, deg_to_rad(-90), deg_to_rad(90))
 	
-
-
 func shoot_projectile():
 	var projectile = projectile_scene.instantiate()
-	projectile.direction = -camera.global_transform.basis.z.normalized()
+	
+	var shoot_direction = -camera.global_transform.basis.z
+	
+	projectile.direction = shoot_direction
 	get_tree().current_scene.add_child(projectile)
-	projectile.global_position = blaster.projectile_position.global_position
-
+	projectile.global_position = camera.global_position + shoot_direction
 
 func _handle_grapple():
 	if Input.is_action_just_pressed("grapple"):
