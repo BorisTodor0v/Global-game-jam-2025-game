@@ -7,12 +7,15 @@ signal increment_score
 
 @onready var enemy_container = $"."
 
+@export var fly_spawner : Node3D
+
 var score := 0
 var spawn_timer: float = 0.0
 
 const SPAWN_INTERVAL := 5.0
 
 func _ready():
+	fly_spawner.connect("fly_death", increment_score.emit)
 	if not enemy_scene:
 		enemy_scene = preload("res://scenes/enemy/enemy.tscn")
 

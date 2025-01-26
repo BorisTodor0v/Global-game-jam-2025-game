@@ -5,6 +5,7 @@ extends CharacterBody3D
 @onready var camera: Camera3D = $CamRoot/SpringArm3D/Camera3D
 @onready var visuals = $player_v3
 @onready var grapplecast = $CamRoot/SpringArm3D/Camera3D/GrappleCast
+@onready var aim_raycast : RayCast3D = $CamRoot/SpringArm3D/Camera3D/AimRaycast
 @onready var player: Node3D = get_parent()
 
 @export var blaster: Blaster
@@ -106,20 +107,19 @@ func _rotate_camera(event: InputEventMouseMotion) -> void:
 	self.rotate_y(-event.relative.x * MOUSE_SENSITIVITY)
 	camera_spring.rotate_x(-event.relative.y * MOUSE_SENSITIVITY)
 	camera_spring.rotation.x = clamp(camera_spring.rotation.x, deg_to_rad(-90), deg_to_rad(90))
+	
 
 
 func shoot_projectile():
 	var projectile = projectile_scene.instantiate()
 	projectile.direction = -camera.global_transform.basis.z.normalized()
 	get_tree().current_scene.add_child(projectile)
-
 	projectile.global_position = blaster.projectile_position.global_position
 
 
 func _handle_grapple():
 	if Input.is_action_just_pressed("grapple"):
 		if grapplecast.is_colliding():
-			print_debug(grapplecast.get_collider())
 			grappling = !grappling
 	if grappling:
 		velocity.y = 0
@@ -185,7 +185,6 @@ func _process_movement_input() -> void:
 		else:
 			# when not aiming, face in movement direction
 			visuals.look_at(position - direction)
-			
 		velocity.x = direction.x * speed * speed_multiplier
 		velocity.z = direction.z * speed * speed_multiplier
 	else:

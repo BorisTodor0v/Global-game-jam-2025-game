@@ -4,8 +4,8 @@ extends CharacterBody3D
 signal death
 
 @export var health: int = 100
+@export var speed : float = 1.0
 
-const SPEED = 1
 var move_timer: float = 0
 const DIRECTION_CHANGE_TIME: float = 1.0
 
@@ -24,7 +24,7 @@ func _change_direction():
 		randf_range(-1, 1)
 	).normalized()
 	
-	velocity = random_direction * SPEED
+	velocity = random_direction * speed
 
 func deal_damage(damage: int):
 	health -= damage
