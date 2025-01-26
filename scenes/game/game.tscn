@@ -1,9 +1,10 @@
-[gd_scene load_steps=12 format=3 uid="uid://x1k6x84g6ciq"]
+[gd_scene load_steps=13 format=3 uid="uid://x1k6x84g6ciq"]
 
 [ext_resource type="PackedScene" uid="uid://bsdrico54rq6e" path="res://scenes/player/player.tscn" id="1_3hlqg"]
 [ext_resource type="Script" path="res://scenes/game/game_manager.gd" id="1_n8kro"]
 [ext_resource type="Script" path="res://scenes/game/enemy_manager.gd" id="2_8l4ho"]
 [ext_resource type="PackedScene" uid="uid://bbdytp3p86jux" path="res://scenes/enemy/enemy.tscn" id="3_eus4r"]
+[ext_resource type="Script" path="res://scenes/game/powerup_manager.gd" id="5_g6mti"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_5bkbc"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -79,3 +80,6 @@ skeleton = NodePath("../../Wall2")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Wall2"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0410955, 0.181322, -3.59634)
 shape = SubResource("ConvexPolygonShape3D_e2qrt")
+
+[node name="Powerups" type="Node3D" parent="."]
+script = ExtResource("5_g6mti")

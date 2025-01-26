@@ -1,0 +1,19 @@
+[gd_scene load_steps=4 format=3 uid="uid://3wbg0k6f4m6h"]
+
+[ext_resource type="Script" path="res://scenes/powerup/speed_up/speed_up.gd" id="1_vfsxu"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_x6l41"]
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_iq836"]
+points = PackedVector3Array(0.5, 0.5, 0.5, 0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, -0.5, 0.5, 0.5, -0.5, -0.5, -0.5, 0.5, -0.5, -0.5, -0.5, 0.5, -0.5, -0.5, -0.5)
+
+[node name="SpeedUp" type="Node3D"]
+script = ExtResource("1_vfsxu")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_x6l41")
+
+[node name="Area3D" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+shape = SubResource("ConvexPolygonShape3D_iq836")

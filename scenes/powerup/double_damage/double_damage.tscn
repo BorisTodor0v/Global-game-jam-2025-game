@@ -1,0 +1,21 @@
+[gd_scene load_steps=4 format=3 uid="uid://da5fuav20xajg"]
+
+[ext_resource type="Script" path="res://scenes/powerup/double_damage/double_damage.gd" id="1_bcggx"]
+
+[sub_resource type="PrismMesh" id="PrismMesh_61c6m"]
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_td5vh"]
+points = PackedVector3Array(0, 0.5, 0.5, 0.5, -0.5, 0.5, 0, 0.5, -0.5, -0.5, -0.5, 0.5, 0.5, -0.5, -0.5, -0.5, -0.5, -0.5)
+
+[node name="DoubleDamage" type="Node3D"]
+script = ExtResource("1_bcggx")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+mesh = SubResource("PrismMesh_61c6m")
+
+[node name="Area3D" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+shape = SubResource("ConvexPolygonShape3D_td5vh")

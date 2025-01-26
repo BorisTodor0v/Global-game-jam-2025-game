@@ -3,9 +3,19 @@ extends Node3D
 
 @export var direction: Vector3
 @export var speed: float = 20.0
-@export var damage: int = 30
+@export var base_damage: int = 30
+var damage: int = base_damage
 var velocity: Vector3 = Vector3.ZERO
 
+static var damage_multiplier: float = 1.0
+
+static func set_damage_multiplier(value: float, duration: float):
+	damage_multiplier = value
+	await Engine.get_main_loop().create_timer(duration).timeout
+	damage_multiplier = 1.0
+
+func _ready():
+	damage = int(base_damage * damage_multiplier)
 
 func set_velocity(new_velocity: Vector3):
 	velocity = new_velocity

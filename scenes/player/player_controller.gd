@@ -32,11 +32,15 @@ var grappling = false
 var hookpoint = Vector3()
 var hookpoint_get = false
 
+var speed_multiplier: float = 1.0
+
 # mouse lock
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 	projectile_scene = preload("res://scenes/projectile/projectile.tscn")
+	
+	add_to_group("player")
 
 
 func _input(_event):
@@ -126,14 +130,17 @@ func _handle_shooting():
 			shoot_projectile();
 			last_shot_time = current_time
 
+func set_speed_multiplier(value: float):
+	speed_multiplier = value
+
 func _process_movement_input() -> void:
 	var input_dir := Input.get_vector("move_left", "move_right", "move_forward", "move_backward")
 	var direction := (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 
 	if direction:
 		visuals.look_at(position - direction)
-		velocity.x = direction.x * speed
-		velocity.z = direction.z * speed
+		velocity.x = direction.x * speed * speed_multiplier
+		velocity.z = direction.z * speed * speed_multiplier
 	else:
 		velocity.x = 0.0
 		velocity.z = 0.0
