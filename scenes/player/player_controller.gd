@@ -219,7 +219,6 @@ func _update_animation(delta) -> void:
 	animation_tree["parameters/AimBlend/blend_amount"] = animation_blend_values["aim"]
 
 func show_power_up_bubble(status_upgrade : String, effect_duration : float):
-	
 	match status_upgrade:
 		"double_damage":
 			power_up_bubble_material.set_shader_parameter("base_color", power_up_bubble_colors["double_damage"]["base_color"])
@@ -227,13 +226,16 @@ func show_power_up_bubble(status_upgrade : String, effect_duration : float):
 		"speed_up":
 			power_up_bubble_material.set_shader_parameter("base_color", power_up_bubble_colors["speed_up"]["base_color"])
 			power_up_bubble_material.set_shader_parameter("pulse_color", power_up_bubble_colors["speed_up"]["pulse_color"])
+			set_speed_multiplier(2.0)
 		_:
 			pass
 	power_up_bubble.show()
 	effect_duration_timer.wait_time = effect_duration
+	effect_duration_timer.start()
 
 func hide_power_up_bubble():
 	power_up_bubble.hide()
+	set_speed_multiplier(1.0)
 
 # OLD CODE WITH CHANGING ANIMATION PLAYER ANIMATION
 	#if velocity.length() > 0:

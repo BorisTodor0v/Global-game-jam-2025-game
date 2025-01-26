@@ -1,0 +1,22 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://oat5r0sfmin6"
+path="res://.godot/imported/speed_up.obj-e2df2d95b0b2736986c17f887f22261f.mesh"
+
+[deps]
+
+files=["res://.godot/imported/speed_up.obj-e2df2d95b0b2736986c17f887f22261f.mesh"]
+
+source_file="res://scenes/powerup/speed_up/speed_up.obj"
+dest_files=["res://.godot/imported/speed_up.obj-e2df2d95b0b2736986c17f887f22261f.mesh", "res://.godot/imported/speed_up.obj-e2df2d95b0b2736986c17f887f22261f.mesh"]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+optimize_mesh=true
+force_disable_mesh_compression=false

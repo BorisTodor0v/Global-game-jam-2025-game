@@ -1,19 +1,42 @@
-[gd_scene load_steps=4 format=3 uid="uid://3wbg0k6f4m6h"]
+[gd_scene load_steps=7 format=3 uid="uid://3wbg0k6f4m6h"]
 
 [ext_resource type="Script" path="res://scenes/powerup/speed_up/speed_up.gd" id="1_vfsxu"]
+[ext_resource type="ArrayMesh" uid="uid://oat5r0sfmin6" path="res://scenes/powerup/speed_up/speed_up.obj" id="2_m2e05"]
+[ext_resource type="Shader" path="res://shaders/power_up_bubble.gdshader" id="3_1bnxy"]
 
-[sub_resource type="BoxMesh" id="BoxMesh_x6l41"]
+[sub_resource type="SphereShape3D" id="SphereShape3D_og4gb"]
+radius = 0.8
 
-[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_iq836"]
-points = PackedVector3Array(0.5, 0.5, 0.5, 0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, -0.5, 0.5, 0.5, -0.5, -0.5, -0.5, 0.5, -0.5, -0.5, -0.5, 0.5, -0.5, -0.5, -0.5)
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_47q77"]
+render_priority = 0
+shader = ExtResource("3_1bnxy")
+shader_parameter/base_color = Color(0, 0.5, 1, 1)
+shader_parameter/pulse_color = Color(0.5, 0.7, 1, 1)
+shader_parameter/speed = 0.1
+shader_parameter/scale = 0.1
+shader_parameter/distortion = 0.01
+shader_parameter/shield_power = 0.07
+shader_parameter/rim_power = 1.949
+shader_parameter/pulse_frequency = 0.1
+
+[sub_resource type="SphereMesh" id="SphereMesh_xpaeq"]
+material = SubResource("ShaderMaterial_47q77")
+radius = 0.8
+height = 1.6
 
 [node name="SpeedUp" type="Node3D"]
 script = ExtResource("1_vfsxu")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-mesh = SubResource("BoxMesh_x6l41")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+mesh = ExtResource("2_m2e05")
 
 [node name="Area3D" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
-shape = SubResource("ConvexPolygonShape3D_iq836")
+shape = SubResource("SphereShape3D_og4gb")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+mesh = SubResource("SphereMesh_xpaeq")

@@ -1,21 +1,42 @@
-[gd_scene load_steps=4 format=3 uid="uid://da5fuav20xajg"]
+[gd_scene load_steps=7 format=3 uid="uid://da5fuav20xajg"]
 
 [ext_resource type="Script" path="res://scenes/powerup/double_damage/double_damage.gd" id="1_bcggx"]
+[ext_resource type="ArrayMesh" uid="uid://dvoepgn50kdsk" path="res://scenes/powerup/double_damage/double_damage.obj" id="2_em3h1"]
+[ext_resource type="Shader" path="res://shaders/power_up_bubble.gdshader" id="3_xifaw"]
 
-[sub_resource type="PrismMesh" id="PrismMesh_61c6m"]
+[sub_resource type="SphereShape3D" id="SphereShape3D_5toy8"]
+radius = 0.8
 
-[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_td5vh"]
-points = PackedVector3Array(0, 0.5, 0.5, 0.5, -0.5, 0.5, 0, 0.5, -0.5, -0.5, -0.5, 0.5, 0.5, -0.5, -0.5, -0.5, -0.5, -0.5)
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_wv6lu"]
+render_priority = 0
+shader = ExtResource("3_xifaw")
+shader_parameter/base_color = Color(0.5, 0, 0, 1)
+shader_parameter/pulse_color = Color(1, 0, 0, 1)
+shader_parameter/speed = 0.1
+shader_parameter/scale = 0.1
+shader_parameter/distortion = 0.01
+shader_parameter/shield_power = 0.07
+shader_parameter/rim_power = 1.949
+shader_parameter/pulse_frequency = 0.1
+
+[sub_resource type="SphereMesh" id="SphereMesh_asubr"]
+material = SubResource("ShaderMaterial_wv6lu")
+radius = 0.8
+height = 1.6
 
 [node name="DoubleDamage" type="Node3D"]
 script = ExtResource("1_bcggx")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
-mesh = SubResource("PrismMesh_61c6m")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.280135, 0)
+mesh = ExtResource("2_em3h1")
 
 [node name="Area3D" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
-shape = SubResource("ConvexPolygonShape3D_td5vh")
+shape = SubResource("SphereShape3D_5toy8")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+mesh = SubResource("SphereMesh_asubr")

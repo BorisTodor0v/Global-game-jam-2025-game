@@ -29,4 +29,4 @@ func spawn_powerup():
 	var random_x = randf_range(-spawn_area, spawn_area)
 	var random_z = randf_range(-spawn_area, spawn_area)
 	
-	powerup.global_position = Vector3(random_x, 1, random_z)
+	powerup.global_position = Vector3(random_x, 0, random_z)

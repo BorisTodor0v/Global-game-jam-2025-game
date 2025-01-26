@@ -1,4 +1,1 @@
-- Added updated model of the player character
-- Added animation blend tree to player character
-- Added proper level to the game
-- Added 2 types of enemies - wandering bacteria and flys
+- Changed look of power up bubbles

@@ -6,7 +6,3 @@ func _ready():
 func apply_powerup(player: Node3D):
 	if player is Player:
 		player.show_power_up_bubble("speed_up", effect_duration)
-		player.set_speed_multiplier(2.0)
-		await get_tree().create_timer(effect_duration).timeout
-		player.set_speed_multiplier(1.0)
-		
