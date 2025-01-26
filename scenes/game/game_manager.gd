@@ -13,6 +13,8 @@ func _ready() -> void:
 
 func on_enemy_killed():
 	var points = 100 * combo_manager.calculate_multiplier()
+	player.hud.show_points_gained(points)
+	await get_tree().create_timer(0.5).timeout
 	score += points
 	player.hud.update_score(score)
 	combo_manager.on_enemy_killed()
@@ -20,5 +22,5 @@ func on_enemy_killed():
 func _on_combo_updated(combo: int, multiplier: float):
 	player.hud.update_combo(combo, multiplier)
 
-func _on_combo_timer_updated(time_left: float):
-	player.hud.update_timer(time_left)
+func _on_combo_timer_updated(time_left: float, max_time: float):
+	player.hud.update_timer(time_left, max_time)
