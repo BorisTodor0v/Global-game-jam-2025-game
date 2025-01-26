@@ -2,7 +2,7 @@ class_name Projectile
 extends Node3D
 
 @export var direction: Vector3
-@export var speed: float = 20.0
+@export var speed: float = 50.0
 @export var base_damage: int = 30
 var damage: int = base_damage
 var velocity: Vector3 = Vector3.ZERO

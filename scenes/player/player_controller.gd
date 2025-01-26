@@ -1,14 +1,18 @@
+class_name Player
 extends CharacterBody3D
 
 @onready var camera_spring: SpringArm3D = $CamRoot/SpringArm3D
 @onready var camera: Camera3D = $CamRoot/SpringArm3D/Camera3D
-@onready var animation_player = $player_v1/AnimationPlayer
-@onready var visuals = $player_v1
+@onready var visuals = $player_v3
 @onready var grapplecast = $CamRoot/SpringArm3D/Camera3D/GrappleCast
 @onready var player: Node3D = get_parent()
 
-@export var blaster: Blaster;
+@export var animation_player : AnimationPlayer
+@export var blaster: Blaster
 @export var rope: Node3D
+@export var power_up_bubble : MeshInstance3D
+var power_up_bubble_material : Material
+@export var effect_duration_timer : Timer
 
 const MOUSE_SENSITIVITY = 0.005
 const DEFAULT_FOV = 70.0
@@ -34,18 +38,41 @@ var hookpoint_get = false
 
 var speed_multiplier: float = 1.0
 
+@export var animation_blend_speed : float = 15
+
+@export var animation_tree : AnimationTree
+# AnimationTree blend values (BETWEEN 0 AND 1)
+var animation_blend_values : Dictionary = {
+	#"idle" - not in here because if all other values are 0, the animation played will be the idle animation
+	"walk" = 0.0,
+	"run" = 0.0,
+	"sprint" = 0.0,
+	"jump" = 0.0,
+	"grapple" = 0.0,
+	"fall" = 0.0,
+	"aim" = 0.0
+}
+var current_animation : String = "idle"
+
+var power_up_bubble_colors : Dictionary = {
+	"double_damage" : {
+		"base_color" = Vector4(0.5, 0.0, 0.0, 1.0),
+		"pulse_color" = Vector4(1.0, 0.0, 0.0, 1.0)
+	},
+	"speed_up" : {
+		"base_color" = Vector4(0.0, 0.5, 1.0, 1.0),
+		"pulse_color" = Vector4(0.5, 0.7, 1.0, 1.0)
+	}
+}
+
 # mouse lock
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 	projectile_scene = preload("res://scenes/projectile/projectile.tscn")
-	
-	add_to_group("player")
-
-
-func _input(_event):
-	is_zooming = Input.is_action_pressed("aim")
-
+	power_up_bubble_material = power_up_bubble.get_active_material(0)
+	print_debug(power_up_bubble_material)
+	#add_to_group("player")
 
 func _unhandled_input(event: InputEvent):
 	if event is InputEventMouseButton:
@@ -61,12 +88,19 @@ func _physics_process(delta):
 	_handle_grapple()
 	_handle_movement(delta)
 	_handle_shooting()
-	_update_animaton()
+	_update_animation(delta)
 
 	_process_movement_input()
 	move_and_slide()
 
 	camera.fov = lerp(camera.fov, ZOOM_FOV if is_zooming else DEFAULT_FOV, 10 * delta)
+
+func _process(delta):
+	if Input.is_action_pressed("aim"):
+		is_zooming = true
+	
+	if Input.is_action_just_released("aim"):
+		is_zooming = false
 
 func _rotate_camera(event: InputEventMouseMotion) -> void:
 	self.rotate_y(-event.relative.x * MOUSE_SENSITIVITY)
@@ -86,8 +120,7 @@ func _handle_grapple():
 	if Input.is_action_just_pressed("grapple"):
 		if grapplecast.is_colliding():
 			print_debug(grapplecast.get_collider())
-			if not grappling:
-				grappling = true
+			grappling = !grappling
 	if grappling:
 		velocity.y = 0
 		if not hookpoint_get:
@@ -96,10 +129,11 @@ func _handle_grapple():
 		if hookpoint.distance_to(transform.origin) > 1:
 			if hookpoint_get:
 				transform.origin = lerp(transform.origin, hookpoint, 0.015)
-		else:
-			grappling = false
-			hookpoint_get = false
-			
+	else:
+		grappling = false
+		hookpoint_get = false
+		visuals.look_at(hookpoint)
+		visuals.global_rotation.x = deg_to_rad(0)
 	update_rope()
 
 func update_rope():
@@ -118,17 +152,22 @@ func _handle_movement(delta: float) -> void:
 	if not is_on_floor():
 		velocity += get_gravity() * delta
 	if Input.is_action_just_pressed("jump") and is_on_floor():
+		current_animation = "jump"
 		velocity.y = JUMP_VELOCITY
 	
-	is_sprinting = Input.is_action_pressed("sprint")
+	if Input.is_action_pressed("sprint"):
+		is_sprinting = !is_zooming
 	speed = SPRINT_SPEED if is_sprinting else WALK_SPEED
 
 func _handle_shooting():
 	if Input.is_action_pressed("shoot"):
-		var current_time = Time.get_ticks_msec() / 1000.0
-		if current_time - last_shot_time >= FIRE_RATE:
-			shoot_projectile();
-			last_shot_time = current_time
+		if is_zooming:
+			
+			# Delay between shots
+			var current_time = Time.get_ticks_msec() / 1000.0
+			if current_time - last_shot_time >= FIRE_RATE:
+				shoot_projectile();
+				last_shot_time = current_time
 
 func set_speed_multiplier(value: float):
 	speed_multiplier = value
@@ -138,15 +177,78 @@ func _process_movement_input() -> void:
 	var direction := (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 
 	if direction:
-		visuals.look_at(position - direction)
+		if !is_zooming:
+			visuals.look_at(position - direction)
 		velocity.x = direction.x * speed * speed_multiplier
 		velocity.z = direction.z * speed * speed_multiplier
 	else:
 		velocity.x = 0.0
 		velocity.z = 0.0
 
-func _update_animaton() -> void:
+func _update_animation(delta) -> void:
+	
+	# Determine what animation state is currently active
 	if velocity.length() > 0:
-		animation_player.play("Sprint" if is_sprinting else "Stand - Walk")
+		if is_on_floor():
+			if is_zooming:
+				current_animation = "aim"
+			else:
+				current_animation = "sprint" if is_sprinting else "walk"
+		else:
+			if grappling:
+				current_animation = "grapple"
+			else:
+				current_animation = "fall"
 	else:
-		animation_player.play("Stand - Idle")
+		current_animation = "aim" if is_zooming else "idle"
+	
+	# Update blend values
+	for animation in animation_blend_values.keys():
+		if animation == current_animation:
+			animation_blend_values[animation] = lerp(animation_blend_values[animation], 1.0, animation_blend_speed*delta)
+		else:
+			animation_blend_values[animation] = lerp(animation_blend_values[animation], 0.0, animation_blend_speed*delta)
+	
+	# Update AnimationTree blend values
+	animation_tree["parameters/WalkBlend/blend_amount"] = animation_blend_values["walk"]
+	animation_tree["parameters/RunBlend/blend_amount"] = animation_blend_values["run"]
+	animation_tree["parameters/SprintBlend/blend_amount"] = animation_blend_values["sprint"]
+	animation_tree["parameters/JumpBlend/blend_amount"] = animation_blend_values["jump"]
+	animation_tree["parameters/GrappleBlend/blend_amount"] = animation_blend_values["grapple"]
+	animation_tree["parameters/FallBlend/blend_amount"] = animation_blend_values["fall"]
+	animation_tree["parameters/AimBlend/blend_amount"] = animation_blend_values["aim"]
+
+func show_power_up_bubble(status_upgrade : String, effect_duration : float):
+	
+	match status_upgrade:
+		"double_damage":
+			power_up_bubble_material.set_shader_parameter("base_color", power_up_bubble_colors["double_damage"]["base_color"])
+			power_up_bubble_material.set_shader_parameter("pulse_color", power_up_bubble_colors["double_damage"]["pulse_color"])
+		"speed_up":
+			power_up_bubble_material.set_shader_parameter("base_color", power_up_bubble_colors["speed_up"]["base_color"])
+			power_up_bubble_material.set_shader_parameter("pulse_color", power_up_bubble_colors["speed_up"]["pulse_color"])
+		_:
+			pass
+	power_up_bubble.show()
+	effect_duration_timer.wait_time = effect_duration
+
+func hide_power_up_bubble():
+	power_up_bubble.hide()
+
+# OLD CODE WITH CHANGING ANIMATION PLAYER ANIMATION
+	#if velocity.length() > 0:
+		#if is_on_floor():
+			#if is_zooming:
+				#animation_player.play("Aim")
+			#else:
+				#animation_player.play("Sprint" if is_sprinting else "Stand - Walk")
+		#else:
+			#if grappling:
+				#animation_player.play("Grapple")
+			#else:
+				#animation_player.play("Falling")
+	#else:
+		#if is_zooming:
+			#animation_player.play("Aim")
+		#else:
+			#animation_player.play("Stand - Idle")

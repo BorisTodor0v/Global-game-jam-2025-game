@@ -5,7 +5,7 @@ extends Node3D
 @export var model: Node3D
 
 func _on_area_entered(body: Node3D):
-	if body.is_in_group("player"):
+	if body is Player:
 		apply_powerup(body)
 		queue_free()
 

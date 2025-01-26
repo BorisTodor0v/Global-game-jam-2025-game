@@ -6,3 +6,5 @@ func _ready():
 func apply_powerup(_player: Node3D):
 	var projectile_script = load("res://scenes/projectile/projectile.gd")
 	projectile_script.set_damage_multiplier(2.0, effect_duration)
+	if _player is Player:
+		_player.show_power_up_bubble("double_damage", effect_duration)

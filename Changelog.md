@@ -1,5 +1,4 @@
-- Added initial model of player character
-- Refactored nodes in "game" and "player" scenes
-- Moved "player.tscn" to "player" folder
-- Changed camera root position
-- Changed length for the camera SpringArm3D to 4m
+- Added updated model of the player character
+- Added animation blend tree to player character
+- Added proper level to the game
+- Added 2 types of enemies - wandering bacteria and flys

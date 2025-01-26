@@ -1,0 +1,48 @@
+[gd_scene load_steps=10 format=3 uid="uid://dsrfu1h2icb5h"]
+
+[ext_resource type="Script" path="res://scenes/game/game_manager.gd" id="1_3q41v"]
+[ext_resource type="PackedScene" uid="uid://bsdrico54rq6e" path="res://scenes/player/player.tscn" id="2_pg1uq"]
+[ext_resource type="Script" path="res://scenes/game/enemy_manager.gd" id="3_pkwqb"]
+[ext_resource type="PackedScene" uid="uid://bbdytp3p86jux" path="res://scenes/enemy/enemy.tscn" id="4_vfga2"]
+[ext_resource type="Script" path="res://scenes/game/powerup_manager.gd" id="5_xu2nj"]
+[ext_resource type="PackedScene" uid="uid://c037qx248jakk" path="res://scenes/levels/kitchen/model/level.glb" id="6_43la2"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_5bkbc"]
+sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+
+[sub_resource type="Sky" id="Sky_g0kp7"]
+sky_material = SubResource("ProceduralSkyMaterial_5bkbc")
+
+[sub_resource type="Environment" id="Environment_xiefi"]
+background_mode = 2
+sky = SubResource("Sky_g0kp7")
+tonemap_mode = 2
+glow_enabled = true
+
+[node name="Node3D" type="Node3D"]
+script = ExtResource("1_3q41v")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_xiefi")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, 0.75, -0.433013, 0, 0, 0)
+shadow_enabled = true
+
+[node name="Player" parent="." instance=ExtResource("2_pg1uq")]
+
+[node name="Enemies" type="Node3D" parent="." node_paths=PackedStringArray("enemy_spawn_point")]
+script = ExtResource("3_pkwqb")
+enemy_spawn_point = NodePath("../Marker3D")
+enemy_scene = ExtResource("4_vfga2")
+
+[node name="Marker3D" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.78673, 0, 4.06487)
+
+[node name="Powerups" type="Node3D" parent="."]
+script = ExtResource("5_xu2nj")
+
+[node name="Level" type="Node3D" parent="."]
+
+[node name="level" parent="Level" instance=ExtResource("6_43la2")]
