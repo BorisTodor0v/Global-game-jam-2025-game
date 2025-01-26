@@ -7,12 +7,12 @@ extends CharacterBody3D
 @onready var grapplecast = $CamRoot/SpringArm3D/Camera3D/GrappleCast
 @onready var player: Node3D = get_parent()
 
-@export var animation_player : AnimationPlayer
+@export var animation_player: AnimationPlayer
 @export var blaster: Blaster
 @export var rope: Node3D
-@export var power_up_bubble : MeshInstance3D
-var power_up_bubble_material : Material
-@export var effect_duration_timer : Timer
+@export var power_up_bubble: MeshInstance3D
+var power_up_bubble_material: Material
+@export var effect_duration_timer: Timer
 
 const MOUSE_SENSITIVITY = 0.005
 const DEFAULT_FOV = 70.0
@@ -38,11 +38,11 @@ var hookpoint_get = false
 
 var speed_multiplier: float = 1.0
 
-@export var animation_blend_speed : float = 15
+@export var animation_blend_speed: float = 15
 
-@export var animation_tree : AnimationTree
+@export var animation_tree: AnimationTree
 # AnimationTree blend values (BETWEEN 0 AND 1)
-var animation_blend_values : Dictionary = {
+var animation_blend_values: Dictionary = {
 	#"idle" - not in here because if all other values are 0, the animation played will be the idle animation
 	"walk" = 0.0,
 	"run" = 0.0,
@@ -52,14 +52,14 @@ var animation_blend_values : Dictionary = {
 	"fall" = 0.0,
 	"aim" = 0.0
 }
-var current_animation : String = "idle"
+var current_animation: String = "idle"
 
-var power_up_bubble_colors : Dictionary = {
-	"double_damage" : {
+var power_up_bubble_colors: Dictionary = {
+	"double_damage": {
 		"base_color" = Vector4(0.5, 0.0, 0.0, 1.0),
 		"pulse_color" = Vector4(1.0, 0.0, 0.0, 1.0)
 	},
-	"speed_up" : {
+	"speed_up": {
 		"base_color" = Vector4(0.0, 0.5, 1.0, 1.0),
 		"pulse_color" = Vector4(0.5, 0.7, 1.0, 1.0)
 	}
@@ -154,9 +154,8 @@ func _handle_movement(delta: float) -> void:
 	if Input.is_action_just_pressed("jump") and is_on_floor():
 		current_animation = "jump"
 		velocity.y = JUMP_VELOCITY
-	
-	if Input.is_action_pressed("sprint"):
-		is_sprinting = !is_zooming
+
+	is_sprinting = Input.is_action_pressed("sprint") and !is_zooming
 	speed = SPRINT_SPEED if is_sprinting else WALK_SPEED
 
 func _handle_shooting():
@@ -205,9 +204,9 @@ func _update_animation(delta) -> void:
 	# Update blend values
 	for animation in animation_blend_values.keys():
 		if animation == current_animation:
-			animation_blend_values[animation] = lerp(animation_blend_values[animation], 1.0, animation_blend_speed*delta)
+			animation_blend_values[animation] = lerp(animation_blend_values[animation], 1.0, animation_blend_speed * delta)
 		else:
-			animation_blend_values[animation] = lerp(animation_blend_values[animation], 0.0, animation_blend_speed*delta)
+			animation_blend_values[animation] = lerp(animation_blend_values[animation], 0.0, animation_blend_speed * delta)
 	
 	# Update AnimationTree blend values
 	animation_tree["parameters/WalkBlend/blend_amount"] = animation_blend_values["walk"]
@@ -218,7 +217,7 @@ func _update_animation(delta) -> void:
 	animation_tree["parameters/FallBlend/blend_amount"] = animation_blend_values["fall"]
 	animation_tree["parameters/AimBlend/blend_amount"] = animation_blend_values["aim"]
 
-func show_power_up_bubble(status_upgrade : String, effect_duration : float):
+func show_power_up_bubble(status_upgrade: String, effect_duration: float):
 	match status_upgrade:
 		"double_damage":
 			power_up_bubble_material.set_shader_parameter("base_color", power_up_bubble_colors["double_damage"]["base_color"])
