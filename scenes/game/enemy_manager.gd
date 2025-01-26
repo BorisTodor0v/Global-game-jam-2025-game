@@ -7,8 +7,8 @@ signal increment_score
 #
 #@onready var enemy_container = $"."
 
-@export var fly_spawner : Node3D
-@export var bacteria_spawner : Node3D
+@export var fly_spawner: Node3D
+@export var bacteria_spawner: Node3D
 
 var score := 0
 #var spawn_timer: float = 0.0
