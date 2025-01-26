@@ -1,11 +1,11 @@
 extends Node3D
 
 @onready var fly_scene = preload("res://scenes/enemy/types/fly/fly.tscn")
-var max_flies_at_once : int = 10
-@export var fly_spawn_timer : float = 5.0
-var fly_spawn_time_elapsed : float = 0
-@export var fly_paths : Array[Path3D]
-var flies : Array[Enemy]
+var max_flies_at_once: int = 10
+@export var fly_spawn_timer: float = 2.0
+var fly_spawn_time_elapsed: float = 0
+@export var fly_paths: Array[Path3D]
+var flies: Array[Enemy]
 
 signal fly_death
 
@@ -19,14 +19,14 @@ func _process(delta):
 	
 	for fly in flies:
 		if fly.health > 0:
-			var path_follow_parent : PathFollow3D = fly.get_parent()
+			var path_follow_parent: PathFollow3D = fly.get_parent()
 			path_follow_parent.progress += delta * fly.speed
 		else:
 			flies.remove_at(fly.get_index())
 
 func spawn_fly():
-	var path_index : int = randi_range(0, fly_paths.size()-1)
-	var fly_path_follow : PathFollow3D = PathFollow3D.new()
+	var path_index: int = randi_range(0, fly_paths.size() - 1)
+	var fly_path_follow: PathFollow3D = PathFollow3D.new()
 	fly_path_follow.rotation_mode = PathFollow3D.ROTATION_XYZ
 	fly_path_follow.use_model_front = true
 	var fly = fly_scene.instantiate()
@@ -36,6 +36,6 @@ func spawn_fly():
 	fly_path_follow.add_child(fly)
 	fly_paths[path_index].add_child(fly_path_follow)
 
-func remove_fly(fly : Enemy):
+func remove_fly(fly: Enemy):
 	flies.erase(fly)
 	fly.queue_free()

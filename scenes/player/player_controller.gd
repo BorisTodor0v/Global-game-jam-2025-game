@@ -93,6 +93,7 @@ func _physics_process(delta):
 	_handle_movement(delta)
 	_handle_shooting()
 	_update_animation(delta)
+	_update_crosshair()
 
 	_process_movement_input()
 	move_and_slide()
@@ -254,3 +255,9 @@ func show_power_up_bubble(status_upgrade: String, effect_duration: float):
 func hide_power_up_bubble():
 	power_up_bubble.hide()
 	set_speed_multiplier(1.0)
+
+func _update_crosshair():
+	if grapplecast.is_colliding():
+		hud.crosshair.modulate.a = 1.0
+	else:
+		hud.crosshair.modulate.a = 0.1

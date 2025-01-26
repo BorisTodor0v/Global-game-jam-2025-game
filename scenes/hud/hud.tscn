@@ -27,7 +27,7 @@ font_size = 24
 font_color = Color(0.00664834, 0.0818267, 0.274, 1)
 outline_size = 4
 
-[node name="HUD" type="Control" node_paths=PackedStringArray("score_label", "combo_multiplier", "points_gain_label", "combo_progress")]
+[node name="HUD" type="Control" node_paths=PackedStringArray("score_label", "combo_multiplier", "points_gain_label", "combo_progress", "crosshair")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -39,6 +39,7 @@ score_label = NodePath("ScoreLabel")
 combo_multiplier = NodePath("ComboMultiplierLabel")
 points_gain_label = NodePath("PointsGainLabel")
 combo_progress = NodePath("ProgressBar")
+crosshair = NodePath("CanvasLayer/TextureRect")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 

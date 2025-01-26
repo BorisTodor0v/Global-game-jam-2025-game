@@ -17,11 +17,11 @@ shader_parameter/pulse_frequency = 0.1
 
 [sub_resource type="SphereMesh" id="SphereMesh_5kxw6"]
 material = SubResource("ShaderMaterial_yl0ue")
-radius = 0.1
-height = 0.2
+radius = 0.15
+height = 0.3
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_scnw0"]
-radius = 0.1
+radius = 0.15
 
 [node name="Node3D" type="Node3D"]
 script = ExtResource("1_182td")

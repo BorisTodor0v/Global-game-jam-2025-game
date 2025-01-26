@@ -5,6 +5,7 @@ extends Control
 @export var combo_multiplier: Label
 @export var points_gain_label: Label
 @export var combo_progress: ProgressBar
+@export var crosshair: TextureRect
 
 var current_score := 0.0
 var display_score := 0.0
