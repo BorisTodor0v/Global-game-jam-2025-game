@@ -7,6 +7,9 @@ extends CharacterBody3D
 @onready var grapplecast = $CamRoot/SpringArm3D/Camera3D/GrappleCast
 @onready var aim_raycast: RayCast3D = $CamRoot/SpringArm3D/Camera3D/AimRaycast
 @onready var player: Node3D = get_parent()
+@onready var shoot_sfx: AudioStreamPlayer3D = $shoot_sfx
+@onready var powerup_sfx: AudioStreamPlayer3D = $powerup_sfx
+@onready var grapple_sfx: AudioStreamPlayer3D = $grapple_sfx
 
 @export var blaster: Blaster
 @export var rope: Node3D
@@ -110,6 +113,7 @@ func _rotate_camera(event: InputEventMouseMotion) -> void:
 	
 func shoot_projectile():
 	var projectile = projectile_scene.instantiate()
+	shoot_sfx.play()
 	
 	var shoot_direction = -camera.global_transform.basis.z
 	
@@ -130,6 +134,7 @@ func _handle_grapple():
 			if hookpoint_get:
 				transform.origin = lerp(transform.origin, hookpoint, 0.015)
 	else:
+		grapple_sfx.play()
 		grappling = false
 		hookpoint_get = false
 		visuals.look_at(hookpoint)
@@ -242,6 +247,7 @@ func show_power_up_bubble(status_upgrade: String, effect_duration: float):
 		_:
 			pass
 	power_up_bubble.show()
+	powerup_sfx.play()
 	effect_duration_timer.wait_time = effect_duration
 	effect_duration_timer.start()
 
