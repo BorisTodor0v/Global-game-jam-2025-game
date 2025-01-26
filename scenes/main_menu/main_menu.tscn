@@ -1,9 +1,10 @@
-[gd_scene load_steps=13 format=4 uid="uid://c1blsg3k41ecn"]
+[gd_scene load_steps=14 format=4 uid="uid://c1blsg3k41ecn"]
 
 [ext_resource type="Script" path="res://scenes/main_menu/main_menu.gd" id="1_lk3xo"]
 [ext_resource type="Texture2D" uid="uid://obykcuhxg0vk" path="res://scenes/main_menu/main_menu_player_body_color.png" id="1_wdrw5"]
 [ext_resource type="Texture2D" uid="uid://65fu6ubgtcyp" path="res://scenes/main_menu/main_menu_player_head_color.png" id="2_ohkof"]
 [ext_resource type="Texture2D" uid="uid://duqt3qgjxi0yx" path="res://scenes/main_menu/main_menu_blaster_color.png" id="3_bw1ml"]
+[ext_resource type="PackedScene" uid="uid://di8g1xmtxq3g0" path="res://scenes/projectile/projectile.tscn" id="5_xgs3h"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_n3mjl"]
 
@@ -156,8 +157,28 @@ skeleton = NodePath("")
 mesh = SubResource("ArrayMesh_la24k")
 skeleton = NodePath("")
 
+[node name="Node3D" parent="main_menu" instance=ExtResource("5_xgs3h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.640729, 2.29144, 0.280233)
+script = null
+
+[node name="Node3D2" parent="main_menu" instance=ExtResource("5_xgs3h")]
+transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.7, -0.527992, 2.6335, 0.280233)
+script = null
+
+[node name="Node3D3" parent="main_menu" instance=ExtResource("5_xgs3h")]
+transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.7, -0.808361, 2.99325, 0.478124)
+script = null
+
+[node name="Node3D4" parent="main_menu" instance=ExtResource("5_xgs3h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.894853, 2.57911, 0.478124)
+script = null
+
+[node name="Node3D5" parent="main_menu" instance=ExtResource("5_xgs3h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.68377, 4.05073, 0.19827)
+script = null
+
 [node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(0.913276, 0.180042, 0.365394, -1.49012e-08, 0.897019, -0.441991, -0.407342, 0.40366, 0.819226, 0.728364, 0.194032, 2.41237)
+transform = Transform3D(0.913276, 0.180042, 0.365394, -1.49012e-08, 0.897019, -0.441992, -0.407342, 0.40366, 0.819226, 0.163103, 0.194032, 2.41237)
 
 [node name="Control" type="Control" parent="."]
 layout_mode = 3
