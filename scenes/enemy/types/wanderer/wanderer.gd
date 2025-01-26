@@ -5,6 +5,8 @@ extends Enemy
 @export var destination : Node3D
 @export var acceleration : float = 2.0
 
+signal destination_reached(node : Enemy)
+
 func _ready():
 	animation_player.play("Moving")
 
@@ -18,3 +20,4 @@ func _physics_process(delta):
 		move_and_slide()
 		if global_transform.origin.distance_to(nav_agent.target_position) < 2.0:
 			destination = null
+			destination_reached.emit(self)

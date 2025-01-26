@@ -1,9 +1,8 @@
-[gd_scene load_steps=95 format=4 uid="uid://x1k6x84g6ciq"]
+[gd_scene load_steps=94 format=4 uid="uid://x1k6x84g6ciq"]
 
 [ext_resource type="PackedScene" uid="uid://bsdrico54rq6e" path="res://scenes/player/player.tscn" id="1_3hlqg"]
 [ext_resource type="Script" path="res://scenes/game/game_manager.gd" id="1_n8kro"]
 [ext_resource type="Script" path="res://scenes/game/enemy_manager.gd" id="2_8l4ho"]
-[ext_resource type="PackedScene" uid="uid://bbdytp3p86jux" path="res://scenes/enemy/enemy.tscn" id="3_eus4r"]
 [ext_resource type="Script" path="res://scenes/game/powerup_manager.gd" id="5_g6mti"]
 [ext_resource type="Texture2D" uid="uid://dtukgxvv0pqvp" path="res://scenes/levels/kitchen/model/level_fridge_color.png" id="6_vlfac"]
 [ext_resource type="Texture2D" uid="uid://kn51x4j4bee6" path="res://scenes/levels/kitchen/model/level_worktable_color.png" id="7_jfi78"]
@@ -19,7 +18,7 @@
 [ext_resource type="Texture2D" uid="uid://clwdv33wfiikt" path="res://scenes/levels/kitchen/model/level_room_color.png" id="17_3g23i"]
 [ext_resource type="Texture2D" uid="uid://nm36bcajshjf" path="res://scenes/levels/kitchen/model/level_chair_color.png" id="18_eq25t"]
 [ext_resource type="Script" path="res://scenes/game/fly_spawner.gd" id="19_ak5ym"]
-[ext_resource type="PackedScene" uid="uid://bkwlqlo2wb5hx" path="res://scenes/enemy/types/wanderer/wanderer.tscn" id="20_u7qka"]
+[ext_resource type="Script" path="res://scenes/game/bacteria_spawners.gd" id="20_7ppay"]
 [ext_resource type="Script" path="res://scenes/game/combo_manager.gd" id="21_u1mqu"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_5bkbc"]
@@ -781,11 +780,10 @@ shadow_enabled = true
 
 [node name="Player" parent="." instance=ExtResource("1_3hlqg")]
 
-[node name="Enemies" type="Node3D" parent="." node_paths=PackedStringArray("enemy_spawn_point", "fly_spawner")]
+[node name="Enemies" type="Node3D" parent="." node_paths=PackedStringArray("fly_spawner", "bacteria_spawner")]
 script = ExtResource("2_8l4ho")
-enemy_spawn_point = NodePath("../Marker3D")
-enemy_scene = ExtResource("3_eus4r")
 fly_spawner = NodePath("../FlyPaths")
+bacteria_spawner = NodePath("../BacteriaHolders")
 
 [node name="Marker3D" type="Marker3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.78673, 0, 4.06487)
@@ -984,7 +982,12 @@ curve = SubResource("Curve3D_qgbr3")
 transform = Transform3D(0.366631, 0, 0.930366, 0, 1, 0, -0.930366, 0, 0.366631, -36, 6, -7.24298)
 curve = SubResource("Curve3D_qgbr3")
 
-[node name="BacteriaHolders" type="Node3D" parent="."]
+[node name="BacteriaHolders" type="Node3D" parent="." node_paths=PackedStringArray("floor_checkpoints", "table_checkpoints", "floor_nav_agent_holder", "table_nav_agent_holder")]
+script = ExtResource("20_7ppay")
+floor_checkpoints = NodePath("Checkpoints/Floor")
+table_checkpoints = NodePath("Checkpoints/Table")
+floor_nav_agent_holder = NodePath("NavigationAgents/Floor")
+table_nav_agent_holder = NodePath("NavigationAgents/Table")
 
 [node name="NavigationRegions" type="Node3D" parent="BacteriaHolders"]
 
@@ -1006,12 +1009,89 @@ mesh = SubResource("BoxMesh_q3f1t")
 
 [node name="NavigationAgents" type="Node3D" parent="BacteriaHolders"]
 
-[node name="Wanderer" parent="BacteriaHolders/NavigationAgents" node_paths=PackedStringArray("destination") instance=ExtResource("20_u7qka")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 15.5543, 3)
-destination = NodePath("../Marker3D")
+[node name="Floor" type="Node3D" parent="BacteriaHolders/NavigationAgents"]
 
-[node name="Marker3D" type="Marker3D" parent="BacteriaHolders/NavigationAgents"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 15.5543, 21)
+[node name="Table" type="Node3D" parent="BacteriaHolders/NavigationAgents"]
+
+[node name="Checkpoints" type="Node3D" parent="BacteriaHolders"]
+
+[node name="Floor" type="Node3D" parent="BacteriaHolders/Checkpoints"]
+
+[node name="Marker3D" type="Marker3D" parent="BacteriaHolders/Checkpoints/Floor"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -29, 0, -15)
+
+[node name="Marker3D2" type="Marker3D" parent="BacteriaHolders/Checkpoints/Floor"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -40, 0.372563, -15)
+
+[node name="Marker3D3" type="Marker3D" parent="BacteriaHolders/Checkpoints/Floor"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26, 0, 15)
+
+[node name="Marker3D4" type="Marker3D" parent="BacteriaHolders/Checkpoints/Floor"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13, 0, 31)
+
+[node name="Marker3D5" type="Marker3D" parent="BacteriaHolders/Checkpoints/Floor"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0, 31)
+
+[node name="Marker3D6" type="Marker3D" parent="BacteriaHolders/Checkpoints/Floor"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0, 17)
+
+[node name="Marker3D7" type="Marker3D" parent="BacteriaHolders/Checkpoints/Floor"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 21, 0, 5)
+
+[node name="Marker3D8" type="Marker3D" parent="BacteriaHolders/Checkpoints/Floor"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17, 0, -17)
+
+[node name="Marker3D9" type="Marker3D" parent="BacteriaHolders/Checkpoints/Floor"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, -17)
+
+[node name="Marker3D10" type="Marker3D" parent="BacteriaHolders/Checkpoints/Floor"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, -8)
+
+[node name="Marker3D11" type="Marker3D" parent="BacteriaHolders/Checkpoints/Floor"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, -31)
+
+[node name="Marker3D12" type="Marker3D" parent="BacteriaHolders/Checkpoints/Floor"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 0, -31)
+
+[node name="Marker3D13" type="Marker3D" parent="BacteriaHolders/Checkpoints/Floor"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22, 0, -31)
+
+[node name="Marker3D14" type="Marker3D" parent="BacteriaHolders/Checkpoints/Floor"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20, 0, -27)
+
+[node name="Marker3D15" type="Marker3D" parent="BacteriaHolders/Checkpoints/Floor"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -30, 0, -24)
+
+[node name="Table" type="Node3D" parent="BacteriaHolders/Checkpoints"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.4743, 15.1641, 12.0205)
+
+[node name="Marker3D2" type="Marker3D" parent="BacteriaHolders/Checkpoints/Table"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.47428, 0.390244, 8.97949)
+gizmo_extents = 1.0
+
+[node name="Marker3D3" type="Marker3D" parent="BacteriaHolders/Checkpoints/Table"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.52572, 0.390244, 8.97949)
+gizmo_extents = 1.0
+
+[node name="Marker3D4" type="Marker3D" parent="BacteriaHolders/Checkpoints/Table"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.52572, 0.390244, 1.97949)
+gizmo_extents = 1.0
+
+[node name="Marker3D5" type="Marker3D" parent="BacteriaHolders/Checkpoints/Table"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.52572, 0.390244, -11.0205)
+gizmo_extents = 1.0
+
+[node name="Marker3D6" type="Marker3D" parent="BacteriaHolders/Checkpoints/Table"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.47428, 0.390244, -9.02051)
+gizmo_extents = 1.0
+
+[node name="Marker3D7" type="Marker3D" parent="BacteriaHolders/Checkpoints/Table"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.47428, 0.390244, -3.02051)
+gizmo_extents = 1.0
+
+[node name="Marker3D8" type="Marker3D" parent="BacteriaHolders/Checkpoints/Table"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.47428, 0.390244, 4.97949)
+gizmo_extents = 1.0
 
 [node name="ComboManager" type="Node" parent="."]
 script = ExtResource("21_u1mqu")
