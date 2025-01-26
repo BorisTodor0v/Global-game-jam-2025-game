@@ -1,9 +1,8 @@
 extends Node3D
 
-@export var spawn_point: Marker3D
 @export var powerup_scenes: Array[PackedScene]
 
-var spawn_timer: float = 0.0
+var spawn_timer := 0.0
 const SPAWN_INTERVAL := 15.0
 
 func _ready():

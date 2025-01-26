@@ -7,12 +7,12 @@ extends CharacterBody3D
 @onready var grapplecast = $CamRoot/SpringArm3D/Camera3D/GrappleCast
 @onready var player: Node3D = get_parent()
 
-@export var animation_player: AnimationPlayer
 @export var blaster: Blaster
 @export var rope: Node3D
 @export var power_up_bubble: MeshInstance3D
 var power_up_bubble_material: Material
 @export var effect_duration_timer: Timer
+@export var hud: HUD
 
 const MOUSE_SENSITIVITY = 0.005
 const DEFAULT_FOV = 70.0
@@ -249,21 +249,3 @@ func show_power_up_bubble(status_upgrade: String, effect_duration: float):
 func hide_power_up_bubble():
 	power_up_bubble.hide()
 	set_speed_multiplier(1.0)
-
-# OLD CODE WITH CHANGING ANIMATION PLAYER ANIMATION
-	#if velocity.length() > 0:
-		#if is_on_floor():
-			#if is_zooming:
-				#animation_player.play("Aim")
-			#else:
-				#animation_player.play("Sprint" if is_sprinting else "Stand - Walk")
-		#else:
-			#if grappling:
-				#animation_player.play("Grapple")
-			#else:
-				#animation_player.play("Falling")
-	#else:
-		#if is_zooming:
-			#animation_player.play("Aim")
-		#else:
-			#animation_player.play("Stand - Idle")
