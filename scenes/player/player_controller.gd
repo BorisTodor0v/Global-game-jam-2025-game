@@ -176,11 +176,25 @@ func _process_movement_input() -> void:
 	var direction := (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 
 	if direction:
-		if !is_zooming:
+		if is_zooming:
+			# when aiming, face forward
+			var aim_direction = camera.global_transform.basis.z
+			aim_direction.y = 0 # Keep character upright
+			aim_direction = aim_direction.normalized()
+			visuals.global_transform.basis = Basis.looking_at(aim_direction)
+		else:
+			# when not aiming, face in movement direction
 			visuals.look_at(position - direction)
+			
 		velocity.x = direction.x * speed * speed_multiplier
 		velocity.z = direction.z * speed * speed_multiplier
 	else:
+		if is_zooming:
+			var aim_direction = camera.global_transform.basis.z
+			aim_direction.y = 0
+			aim_direction = aim_direction.normalized()
+			visuals.global_transform.basis = Basis.looking_at(aim_direction)
+			
 		velocity.x = 0.0
 		velocity.z = 0.0
 
